@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import Search from "./components/Search";
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+import UselessTextInput from "./components/test";
+import { Provider } from "react-redux";
+import { store } from "./store/inputStore";
+import "react-native-gesture-handler";
+
+const Stack = createSharedElementStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="search"
+          screenOptions={{ headerMode: "none" }}
+        >
+          <Stack.Screen name="search" component={Search} />
+          <Stack.Screen name="test" component={UselessTextInput} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
