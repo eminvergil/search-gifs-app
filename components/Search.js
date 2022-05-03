@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableHighlight,
   FlatList,
   SafeAreaView,
   Image,
@@ -17,6 +16,7 @@ import { useSnapshot } from "valtio";
 import { FETCH_LIMIT, SPACING, windowHeight, windowWidth } from "../constant";
 import { InputState } from "../state/globalContext";
 import { changeText } from "../store/slice/inputSlice";
+import { TouchableButton } from "./TouchableButton";
 
 export default function Search() {
   const [input, setInput] = useState("");
@@ -85,59 +85,30 @@ function GetGiphy() {
       ),
     {
       // enabled: false,
-      // refetchOnWindowFocus: false,
-      // refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
       keepPreviousData: true,
     }
   );
 
+  const LoadMoreFunction = () => {
+    console.log(limit);
+  };
   return (
     <View>
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: SPACING,
-        }}
-      >
-        <TouchableHighlight
-          style={{
-            height: 40,
-            width: 160,
-            borderRadius: 10,
-            backgroundColor: "green",
-            justifyContent: "center",
-          }}
-          onPress={refetch}
-        >
-          <Text style={{ color: "white", textAlign: "center" }}>Get Gifs</Text>
-        </TouchableHighlight>
-      </View>
+      {/* {TouchableButton(refetch, "Get Gifs")} */}
+      <TouchableButton onPressFunction={refetch} text="Get Gifs" />
 
-      <SafeAreaView style={{ marginTop: SPACING * 2 }}>
+      <SafeAreaView style={{ marginTop: SPACING }}>
         <GetGiphyStatus isLoading={isLoading} error={error} data={data} />
       </SafeAreaView>
       {/* {console.log(data?.data.length, isFetching, isLoading)} */}
       {!isLoading && data?.data.length !== 0 && (
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <TouchableHighlight
-            style={{
-              height: 40,
-              width: 160,
-              borderRadius: 10,
-              backgroundColor: limit < FETCH_LIMIT ? "green" : "gray",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-            onPress={() => {
-              setLimit(limit + 20);
-              // refetch();
-            }}
-            disabled={limit >= FETCH_LIMIT}
-          >
-            <Text style={{ color: "white" }}>Load More</Text>
-          </TouchableHighlight>
-        </View>
+        <TouchableButton
+          onPress={LoadMoreFunction}
+          text="Load More"
+          limit={limit}
+        />
       )}
     </View>
   );
